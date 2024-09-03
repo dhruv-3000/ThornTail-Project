@@ -1,0 +1,1059 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2017 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.thorntail</groupId>
+    <artifactId>thorntail</artifactId>
+    <version>2.7.1.Final-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>build-parent</artifactId>
+
+  <packaging>pom</packaging>
+
+  <name>Thorntail Build Parent</name>
+  <description>Build Parent to bring in required dependencies</description>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${version.maven-enforcer-plugin}</version>
+          <executions>
+            <execution>
+              <id>enforce-dependencies</id>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <dependencyConvergence />
+                  <bannedDependencies>
+                    <excludes>
+                      <!-- ban Jakarta artifacts, if WildFly uses JBoss Spec ones -->
+                      <exclude>jakarta.annotation:jakarta.annotation-api</exclude>
+                      <exclude>jakarta.batch:jakarta.batch-api</exclude>
+                      <exclude>jakarta.ejb:jakarta.ejb-api</exclude>
+                      <exclude>jakarta.el:jakarta.el-api</exclude>
+                      <exclude>jakarta.enterprise.concurrent:jakarta.enterprise.concurrent-api</exclude>
+                      <exclude>jakarta.faces:jakarta.faces-api</exclude>
+                      <exclude>jakarta.interceptor:jakarta.interceptor-api</exclude>
+                      <exclude>jakarta.jms:jakarta.jms-api</exclude>
+                      <exclude>jakarta.management.j2ee:management-spec</exclude>
+                      <exclude>jakarta.resource:jakarta.resource-api</exclude>
+                      <exclude>jakarta.security.auth.message:jakarta.security.auth.message-api</exclude>
+                      <exclude>jakarta.security.jacc:jakarta.security.jacc-api</exclude>
+                      <exclude>jakarta.servlet:jakarta.servlet-api</exclude>
+                      <exclude>jakarta.servlet.jsp:jakarta.servlet.jsp-api</exclude>
+                      <exclude>jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api</exclude>
+                      <exclude>jakarta.transaction:jakarta.transaction-api</exclude>
+                      <exclude>jakarta.websocket:jakarta.websocket-api</exclude>
+                      <exclude>jakarta.ws.rs:jakarta.ws.rs-api</exclude>
+                      <exclude>jakarta.xml.bind:jakarta.xml.bind-api</exclude>
+                      <exclude>jakarta.xml.rpc:jakarta.xml.rpc-api</exclude>
+                      <exclude>jakarta.xml.soap:jakarta.xml.soap-api</exclude>
+                      <exclude>jakarta.xml.ws:jakarta.xml.ws-api</exclude>
+                      <!-- ban JBoss Spec artifacts, if WildFly uses Jakarta ones -->
+                      <exclude>org.jboss.spec.javax.json:jboss-json-api_1.0_spec</exclude>
+                      <exclude>org.jboss.spec.javax.json:jboss-json-api_1.1_spec</exclude>
+                      <!-- ban JBoss Spec artifacts, if WildFly uses Apache Taglibs ones -->
+                      <exclude>org.jboss.spec.javax.servlet.jstl:jboss-jstl-api_1.2_spec</exclude>
+                      <!-- ban old JBoss Spec artifacts, we want the new ones -->
+                      <exclude>org.jboss.spec.javax.annotation:jboss-annotations-api_1.1_spec</exclude>
+                      <exclude>org.jboss.spec.javax.annotation:jboss-annotations-api_1.2_spec</exclude>
+                      <exclude>org.jboss.spec.javax.ejb:jboss-ejb-api_3.0_spec</exclude>
+                      <exclude>org.jboss.spec.javax.ejb:jboss-ejb-api_3.1_spec</exclude>
+                      <exclude>org.jboss.spec.javax.el:jboss-el-api_2.2_spec</exclude>
+                      <exclude>org.jboss.spec.javax.faces:jboss-jsf-api_2.0_spec</exclude>
+                      <exclude>org.jboss.spec.javax.faces:jboss-jsf-api_2.1_spec</exclude>
+                      <exclude>org.jboss.spec.javax.faces:jboss-jsf-api_2.2_spec</exclude>
+                      <exclude>org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.1_spec</exclude>
+                      <exclude>org.jboss.spec.javax.jms:jboss-jms-api_1.1_spec</exclude>
+                      <exclude>org.jboss.spec.javax.resource:jboss-connector-api_1.5_spec</exclude>
+                      <exclude>org.jboss.spec.javax.resource:jboss-connector-api_1.6_spec</exclude>
+                      <exclude>org.jboss.spec.javax.security.auth.message:jboss-jaspi-api_1.0_spec</exclude>
+                      <exclude>org.jboss.spec.javax.security.jacc:jboss-jacc-api_1.1_spec</exclude>
+                      <exclude>org.jboss.spec.javax.security.jacc:jboss-jacc-api_1.4_spec</exclude>
+                      <exclude>org.jboss.spec.javax.servlet:jboss-servlet-api_2.5_spec</exclude>
+                      <exclude>org.jboss.spec.javax.servlet:jboss-servlet-api_3.0_spec</exclude>
+                      <exclude>org.jboss.spec.javax.servlet:jboss-servlet-api_3.1_spec</exclude>
+                      <exclude>org.jboss.spec.javax.servlet.jsp:jboss-jsp-api_2.2_spec</exclude>
+                      <exclude>org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec</exclude>
+                      <exclude>org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec</exclude>
+                      <exclude>org.jboss.spec.javax.websocket:jboss-websocket-api_1.0_spec</exclude>
+                      <exclude>org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_1.1_spec</exclude>
+                      <exclude>org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.0_spec</exclude>
+                      <exclude>org.jboss.spec.javax.xml.bind:jboss-jaxb-api_2.2_spec</exclude>
+                      <exclude>org.jboss.spec.javax.xml.soap:jboss-saaj-api_1.3_spec</exclude>
+                      <exclude>org.jboss.spec.javax.xml.ws:jboss-jaxws-api_2.2_spec</exclude>
+                      <!-- ban javax dependencies in favor of Jakarta or JBoss Spec -->
+                      <exclude>javax.activation:activation</exclude>
+                      <exclude>javax.activation:javax.activation-api</exclude>
+                      <exclude>javax.annotation:javax.annotation-api</exclude>
+                      <exclude>javax.enterprise:cdi-api</exclude>
+                      <exclude>javax.inject:javax.inject</exclude>
+                      <exclude>javax.interceptor:javax.interceptor-api</exclude>
+                      <exclude>javax.jms:javax.jms-api</exclude>
+                      <exclude>javax.json:javax.json-api</exclude>
+                      <exclude>javax.json.bind:javax.json.bind-api</exclude>
+                      <exclude>javax.mail:javax.mail-api</exclude>
+                      <exclude>javax.persistence:javax.persistence-api</exclude>
+                      <exclude>javax.persistence:persistence-api</exclude>
+                      <exclude>javax.security.enterprise:javax.security.enterprise-api</exclude>
+                      <exclude>javax.servlet:servlet-api</exclude>
+                      <exclude>javax.servlet:javax.servlet-api</exclude>
+                      <exclude>javax.transaction:jta</exclude>
+                      <exclude>javax.transaction:javax.transaction-api</exclude>
+                      <exclude>javax.validation:validation-api</exclude>
+                      <exclude>javax.websocket:javax.websocket-api</exclude>
+                      <exclude>javax.ws.rs:javax.ws.rs-api</exclude>
+                      <exclude>javax.xml:jaxrpc-api</exclude>
+                      <exclude>javax.xml.bind:jaxb-api</exclude>
+                      <exclude>javax.xml.soap:saaj-api</exclude>
+                      <exclude>javax.xml.stream:stax-api</exclude>
+                      <exclude>javax.xml.ws:jaxws-api</exclude>
+                      <exclude>org.glassfish:javax.json</exclude>
+                      <exclude>org.glassfish:javax.el</exclude>
+                      <exclude>com.sun.activation:javax.activation</exclude>
+                      <exclude>com.sun.mail:javax.mail</exclude>
+                      <!-- ban Geronimo dependencies -->
+                      <exclude>org.apache.geronimo.specs:*</exclude>
+                      <!-- ban the API uberjars -->
+                      <exclude>jakarta.platform:jakarta.jakartaee-api</exclude>
+                      <exclude>jakarta.platform:jakarta.jakartaee-web-api</exclude>
+                      <exclude>javax:javaee-api</exclude>
+                      <exclude>javax:javaee-web-api</exclude>
+                      <!-- ban old Netty uberjars -->
+                      <exclude>org.jboss.netty:netty</exclude>
+                      <exclude>io.netty:netty</exclude>
+                      <!-- ban JacORB, WildFly now uses the OpenJDK ORB -->
+                      <exclude>org.jacorb:*</exclude>
+                      <!-- ban Log4J (use org.jboss.logmanager:log4j-jboss-logmanager instead) -->
+                      <exclude>log4j:log4j</exclude>
+                      <exclude>org.apache.logging.log4j:log4j-api</exclude>
+                      <exclude>org.apache.logging.log4j:log4j-core</exclude>
+                      <exclude>org.apache.logging.log4j:log4j-slf4j-impl</exclude>
+                      <!-- ban commons-logging (use org.jboss.logging:commons-logging-jboss-logging instead) -->
+                      <exclude>commons-logging:commons-logging</exclude>
+                      <exclude>commons-logging:commons-logging-api</exclude>
+                      <exclude>org.slf4j:jcl-over-slf4j</exclude>
+                      <!-- ban SLF4J implementations (use org.jboss.slf4j:slf4j-jboss-logging instead) -->
+                      <exclude>org.slf4j:slf4j-simple</exclude>
+                      <exclude>org.slf4j:slf4j-nop</exclude>
+                      <exclude>org.slf4j:slf4j-jdk14</exclude>
+                      <exclude>org.slf4j:slf4j-log4j12</exclude>
+                      <exclude>org.slf4j:slf4j-log4j13</exclude>
+                      <!-- ban JBoss Logging implementations -->
+                      <exclude>org.jboss.logging:jboss-logging-generator</exclude>
+                      <exclude>org.jboss.logging:jboss-logging-log4j</exclude>
+                      <exclude>org.jboss.logging:jboss-logging-jdk</exclude>
+                      <exclude>org.jboss.logging:jboss-logging-logmanager</exclude>
+                      <exclude>org.jboss.logging:jboss-logging-spi</exclude>
+                      <exclude>org.jboss.logging:jboss-logging-tools</exclude>
+                      <!-- ban code quality annotation JARs -->
+                      <exclude>com.google.code.findbugs:jsr305</exclude>
+                      <exclude>com.google.code.findbugs:annotations</exclude>
+                      <exclude>com.google.errorprone:error_prone_annotations</exclude>
+                      <exclude>com.google.j2objc:annotations</exclude>
+                      <exclude>org.checkerframework:checker-compat-qual</exclude>
+                      <exclude>org.checkerframework:checker-qual</exclude>
+                      <exclude>org.codehaus.mojo:animal-sniffer-annotations</exclude>
+                      <!-- ban OSGi annotation JAR -->
+                      <exclude>org.osgi:org.osgi.annotation.versioning</exclude>
+                    </excludes>
+                  </bannedDependencies>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>io.thorntail</groupId>
+        <artifactId>thorntail-fraction-plugin</artifactId>
+        <version>${version.thorntail.fraction.plugin}</version>
+        <executions>
+          <execution>
+            <id>process</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>process</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.wildfly.core</groupId>
+        <artifactId>wildfly-core-parent</artifactId>
+        <type>pom</type>
+        <version>${version.org.wildfly.core}</version>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.resolver</groupId>
+        <artifactId>shrinkwrap-resolver-bom</artifactId>
+        <version>${version.org.jboss.shrinkwrap.resolver}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.arquillian</groupId>
+        <artifactId>arquillian-bom</artifactId>
+        <version>${version.org.arquillian}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.wildfly</groupId>
+        <artifactId>wildfly-parent</artifactId>
+        <version>${version.wildfly}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss</groupId>
+        <artifactId>jandex</artifactId>
+        <version>${version.jandex}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.modules</groupId>
+        <artifactId>jboss-modules</artifactId>
+        <version>${version.jboss-modules}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.thorntail.jdk-specific</groupId>
+        <artifactId>thorntail-jdk-specific</artifactId>
+        <version>${version.thorntail-jdk-specific}</version>
+      </dependency>
+
+      <!-- org.wildfly:wildfly-parent transitively brings in an older version -->
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-resolver-provider</artifactId>
+        <version>${version.org.apache.maven}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-settings-builder</artifactId>
+        <version>${version.org.apache.maven}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-api</artifactId>
+        <version>${version.org.jboss.shrinkwrap}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-spi</artifactId>
+        <version>${version.org.jboss.shrinkwrap}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-impl-base</artifactId>
+        <version>${version.org.jboss.shrinkwrap}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+        <artifactId>shrinkwrap-descriptors-spi</artifactId>
+        <version>${version.org.jboss.shrinkwrap.descriptors}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+        <artifactId>shrinkwrap-descriptors-api-base</artifactId>
+        <version>${version.org.jboss.shrinkwrap.descriptors}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+        <artifactId>shrinkwrap-descriptors-api-javaee</artifactId>
+        <version>${version.org.jboss.shrinkwrap.descriptors}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+        <artifactId>shrinkwrap-descriptors-api-jboss</artifactId>
+        <version>${version.org.jboss.shrinkwrap.descriptors}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+        <artifactId>shrinkwrap-descriptors-impl-base</artifactId>
+        <version>${version.org.jboss.shrinkwrap.descriptors}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+        <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
+        <version>${version.org.jboss.shrinkwrap.descriptors}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+        <artifactId>shrinkwrap-descriptors-impl-jboss</artifactId>
+        <version>${version.org.jboss.shrinkwrap.descriptors}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.maven.resolver</groupId>
+        <artifactId>maven-resolver-api</artifactId>
+        <version>${version.org.apache.maven.resolver}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.resolver</groupId>
+        <artifactId>maven-resolver-spi</artifactId>
+        <version>${version.org.apache.maven.resolver}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.resolver</groupId>
+        <artifactId>maven-resolver-util</artifactId>
+        <version>${version.org.apache.maven.resolver}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.resolver</groupId>
+        <artifactId>maven-resolver-impl</artifactId>
+        <version>${version.org.apache.maven.resolver}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.resolver</groupId>
+        <artifactId>maven-resolver-connector-basic</artifactId>
+        <version>${version.org.apache.maven.resolver}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.resolver</groupId>
+        <artifactId>maven-resolver-transport-file</artifactId>
+        <version>${version.org.apache.maven.resolver}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.resolver</groupId>
+        <artifactId>maven-resolver-transport-http</artifactId>
+        <version>${version.org.apache.maven.resolver}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>config-api</artifactId>
+        <version>${version.wildfly.config-api}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>config-api-runtime</artifactId>
+        <version>${version.wildfly.config-api}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>mongo-config-api</artifactId>
+        <version>${version.mongo.config-api}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>cassandra-config-api</artifactId>
+        <version>${version.cassandra.config-api}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>neo4j-config-api</artifactId>
+        <version>${version.neo4j.config-api}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>orientdb-config-api</artifactId>
+        <version>${version.orientdb.config-api}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-plugin-api</artifactId>
+        <version>${version.maven.plugin.api}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-core</artifactId>
+        <version>${version.maven.plugin.api}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-settings</artifactId>
+        <version>${version.maven.plugin.api}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.plugin-tools</groupId>
+        <artifactId>maven-plugin-annotations</artifactId>
+        <version>${version.maven-plugin-plugin}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-interpolation</artifactId>
+        <version>${version.plexus-interpolation}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.sonatype.plexus</groupId>
+        <artifactId>plexus-sec-dispatcher</artifactId>
+        <version>${version.plexus-sec-dispatcher}</version>
+      </dependency>
+
+      <!-- Needed by fraction-metadata -->
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm</artifactId>
+        <version>${version.org.ow2.asm}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm-commons</artifactId>
+        <version>${version.org.ow2.asm}</version>
+      </dependency>
+
+      <!-- Used by SwarmTool -->
+      <dependency>
+        <groupId>net.sf.jopt-simple</groupId>
+        <artifactId>jopt-simple</artifactId>
+        <version>${version.jopt-simple}</version>
+      </dependency>
+
+      <!-- Needed by bootstrap -->
+      <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <version>${version.org.snakeyaml}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>keycloak-client-config-api</artifactId>
+        <version>${version.keycloak.config-api}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-adapter-feature-pack</artifactId>
+        <type>zip</type>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-core</artifactId>
+        <version>${version.keycloak}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-undertow-adapter</artifactId>
+        <version>${version.keycloak}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>keycloak-server-config-api</artifactId>
+        <version>${version.keycloak.config-api}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-server-feature-pack</artifactId>
+        <type>zip</type>
+        <version>${version.keycloak}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-themes</artifactId>
+        <version>${version.keycloak}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-adapter-core</artifactId>
+        <version>${version.keycloak}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.openshift</groupId>
+        <artifactId>openshift-restclient-java</artifactId>
+        <version>${version.openshift.client}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>com.squareup.okhttp3</groupId>
+        <artifactId>okhttp</artifactId>
+        <version>${version.com.squareup.okhttp}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.squareup.okio</groupId>
+        <artifactId>okio</artifactId>
+        <version>${version.com.squareup.okio}</version>
+      </dependency>
+
+      <!-- Jackson -->
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${version.com.fasterxml.jackson.databind}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-yaml</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformats-text</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jdk8</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.jaxrs</groupId>
+        <artifactId>jackson-jaxrs-base</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.jaxrs</groupId>
+        <artifactId>jackson-jaxrs-json-provider</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.module</groupId>
+        <artifactId>jackson-module-jaxb-annotations</artifactId>
+        <version>${version.com.fasterxml.jackson}</version>
+      </dependency>
+
+      <!-- MicroProfile -->
+      <dependency>
+        <groupId>org.eclipse.microprofile.config</groupId>
+        <artifactId>microprofile-config-api</artifactId>
+        <version>${version.microprofile-config}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.smallrye.config</groupId>
+        <artifactId>smallrye-config</artifactId>
+        <version>${version.smallrye.config}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>microprofile-config-wildfly-config-api</artifactId>
+        <version>${version.microprofile-config-wildfly}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.microprofile.fault-tolerance</groupId>
+        <artifactId>microprofile-fault-tolerance-api</artifactId>
+        <version>${version.microprofile-fault-tolerance}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.microprofile.health</groupId>
+        <artifactId>microprofile-health-api</artifactId>
+        <version>${version.microprofile-health}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.microprofile.metrics</groupId>
+        <artifactId>microprofile-metrics-api</artifactId>
+        <version>${version.microprofile-metrics}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.microprofile.jwt</groupId>
+        <artifactId>microprofile-jwt-auth-api</artifactId>
+        <version>${version.microprofile-jwt-auth}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-jaxrs</artifactId>
+        <version>${version.resteasy}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-client</artifactId>
+        <version>${version.resteasy}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-client-microprofile</artifactId>
+        <version>${version.resteasy}</version>
+      </dependency>
+
+      <!-- can be removed when updated to WildFly 17+ -->
+      <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-validator-provider</artifactId>
+        <version>${version.resteasy}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.microprofile.rest.client</groupId>
+        <artifactId>microprofile-rest-client-api</artifactId>
+        <version>${version.microprofile.restclient}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.eclipse.microprofile.openapi</groupId>
+        <artifactId>microprofile-openapi-api</artifactId>
+        <version>${version.microprofile-openapi}</version>
+      </dependency>
+
+      <!-- SmallRye -->
+      <dependency>
+        <groupId>io.smallrye</groupId>
+        <artifactId>smallrye-health</artifactId>
+        <version>${version.smallrye.health}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.smallrye</groupId>
+        <artifactId>smallrye-metrics</artifactId>
+        <version>${version.smallrye.metrics}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.smallrye</groupId>
+        <artifactId>smallrye-opentracing</artifactId>
+        <version>${version.smallrye.opentracing}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.smallrye</groupId>
+        <artifactId>smallrye-fault-tolerance</artifactId>
+        <version>${version.smallrye.fault-tolerance}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.smallrye</groupId>
+        <artifactId>smallrye-open-api</artifactId>
+        <version>${version.smallrye.openapi}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.jboss</groupId>
+            <artifactId>jandex</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-api</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>io.smallrye</groupId>  
+        <artifactId>smallrye-jwt</artifactId>
+        <version>${version.smallrye.jwt}</version>
+      </dependency>
+
+      <!-- Undertow -->
+      <dependency>
+        <groupId>io.undertow</groupId>
+        <artifactId>undertow-core</artifactId>
+        <version>${version.undertow}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.undertow</groupId>
+        <artifactId>undertow-servlet</artifactId>
+        <version>${version.undertow}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.undertow</groupId>
+        <artifactId>undertow-websockets-jsr</artifactId>
+        <version>${version.undertow}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.undertow.jastow</groupId>
+        <artifactId>jastow</artifactId>
+        <version>${version.undertow.jastow}</version>
+      </dependency>
+
+      <!-- The following are not used, they are here to make PME align proper versions-->
+      <dependency>
+          <groupId>org.apache.thrift</groupId>
+          <artifactId>libthrift</artifactId>
+          <version>${version.jaeger.apache.thrift}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>${version.gson}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>jakarta.json</artifactId>
+        <version>${version.org.glassfish.jakarta.json}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>${version.commons-codec}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.james</groupId>
+        <artifactId>apache-mime4j</artifactId>
+        <version>${version.apache-mime4j}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+        <version>${version.httpcore}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${version.httpclient}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>${version.commons-logging}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${version.commons-io}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.jcip</groupId>
+        <artifactId>jcip-annotations</artifactId>
+        <version>${version.jcip-annotations}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.openjdk-orb</groupId>
+        <artifactId>openjdk-orb</artifactId>
+        <version>${version.openjdk-orb}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml</groupId>
+        <artifactId>classmate</artifactId>
+        <version>${version.com.fasterxml.classmate}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.opentracing.contrib</groupId>
+        <artifactId>opentracing-concurrent</artifactId>
+        <version>${version.opentracing.concurrent}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.xnio</groupId>
+        <artifactId>xnio-nio</artifactId>
+        <version>${version.xnio}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.xnio</groupId>
+        <artifactId>xnio-api</artifactId>
+        <version>${version.xnio}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.wildfly.client</groupId>
+        <artifactId>wildfly-client-config</artifactId>
+        <version>${version.wildfly-client-config}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.wildfly.common</groupId>
+        <artifactId>wildfly-common</artifactId>
+        <version>${version.wildfly-common}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${version.slf4j}</version>
+      </dependency>
+      <!-- end of unused dependencies -->
+
+      <!-- Feature Packs -->
+      <dependency>
+        <groupId>org.wildfly</groupId>
+        <artifactId>wildfly-servlet-feature-pack</artifactId>
+        <version>${version.wildfly}</version>
+        <type>zip</type>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.wildfly</groupId>
+        <artifactId>wildfly-feature-pack</artifactId>
+        <version>${version.wildfly}</version>
+        <type>zip</type>
+        <scope>provided</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.wildfly.core</groupId>
+            <artifactId>wildfly-core-feature-pack</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.wildfly.core</groupId>
+        <artifactId>wildfly-core-feature-pack</artifactId>
+        <version>${version.org.wildfly.core}</version>
+        <type>zip</type>
+        <scope>provided</scope>
+      </dependency>
+      <!-- needs to come _after_ WildFly feature packs, because in case of conflicts, the last one wins -->
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>microprofile-config-wildfly-feature-pack</artifactId>
+        <version>${version.microprofile-config-wildfly}</version>
+        <type>zip</type>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <modules>
+    <!-- DO NOT ADD MODULES HERE. THIS ACTS AS A PARENT POM ONLY.
+         ANY MODULES SHOULD BE ADDED, AS APPROPRIATE, TO THE ROOT
+         pom.xml OF THIS PROJECT. -->
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>unsupported</id>
+      <activation>
+        <property>
+          <name>!swarm.product.build</name>
+        </property>
+      </activation>
+      <properties>
+        <testCategory.excluded>category.ProductOnly</testCategory.excluded>
+      </properties>
+
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.gradle</groupId>
+            <artifactId>gradle-core</artifactId>
+            <version>${version.gradle}</version>
+            <scope>provided</scope>
+          </dependency>
+          <dependency>
+            <groupId>org.gradle</groupId>
+            <artifactId>gradle-base-services</artifactId>
+            <version>${version.gradle}</version>
+            <scope>provided</scope>
+          </dependency>
+          <dependency>
+            <groupId>org.gradle</groupId>
+            <artifactId>gradle-plugins</artifactId>
+            <version>${version.gradle.plugins}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.gradle</groupId>
+            <artifactId>gradle-tooling-api</artifactId>
+            <version>${version.gradle}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${version.groovy}</version>
+            <scope>provided</scope>
+          </dependency>
+
+          <!-- Needed by Drools Server -->
+          <dependency>
+            <groupId>org.kie.server</groupId>
+            <artifactId>kie-server-services-common</artifactId>
+            <version>${version.org.kie}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.kie.server</groupId>
+            <artifactId>kie-server-rest-common</artifactId>
+            <version>${version.org.kie}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.kie.server</groupId>
+            <artifactId>kie-server-services-drools</artifactId>
+            <version>${version.org.kie}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.kie.server</groupId>
+            <artifactId>kie-server-rest-drools</artifactId>
+            <version>${version.org.kie}</version>
+          </dependency>
+
+          <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${version.flyway}</version>
+          </dependency>
+
+          <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-war</artifactId>
+            <type>war</type>
+            <version>${version.jolokia}</version>
+          </dependency>
+
+          <!-- Needed by Logstash -->
+          <dependency>
+            <groupId>org.jboss.logmanager</groupId>
+            <artifactId>jboss-logmanager-ext</artifactId>
+            <version>${version.jboss-logmanager-ext}</version>
+          </dependency>
+
+          <!-- NoSQL start -->
+          <dependency>
+            <groupId>com.orientechnologies</groupId>
+            <artifactId>orientdb-core</artifactId>
+            <version>${version.com.orientechnologies}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
+                <artifactId>concurrentlinkedhashmap-lru</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>net.java.dev.jna</groupId>
+                <artifactId>jna-platform</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+
+          <dependency>
+            <groupId>com.orientechnologies</groupId>
+            <artifactId>orientdb-graphdb</artifactId>
+            <version>${version.com.orientechnologies}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>com.orientechnologies</groupId>
+                <artifactId>orientdb-server</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.orientechnologies</groupId>
+                <artifactId>orientdb-tools</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.tinkerpop.gremlin</groupId>
+                <artifactId>gremlin-java</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.tinkerpop.gremlin</groupId>
+                <artifactId>gremlin-groovy</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+
+          <dependency>
+            <groupId>com.orientechnologies</groupId>
+            <artifactId>orientdb-object</artifactId>
+            <version>${version.com.orientechnologies}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>org.hibernate.javax.persistence</groupId>
+                <artifactId>hibernate-jpa-2.0-api</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+
+          <dependency>
+            <groupId>com.orientechnologies</groupId>
+            <artifactId>orientdb-client</artifactId>
+            <version>${version.com.orientechnologies}</version>
+          </dependency>
+
+          <dependency>
+            <groupId>com.tinkerpop.blueprints</groupId>
+            <artifactId>blueprints-core</artifactId>
+            <version>${version.com.tinkerpop.blueprints}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>com.carrotsearch</groupId>
+                <artifactId>hppc</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+
+          <dependency>
+            <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
+            <artifactId>concurrentlinkedhashmap-lru</artifactId>
+            <version>${version.com.googlecode.concurrentlinkedhashmap}</version>
+          </dependency>
+          <!-- NoSQL end -->
+
+          <!-- Swagger -->
+          <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jaxrs</artifactId>
+            <version>${version.io.swagger}</version>
+          </dependency>
+          <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${version.io.swagger}</version>
+          </dependency>
+
+          <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>swagger-ui</artifactId>
+            <version>${version.org.webjars.swagger-ui}</version>
+          </dependency>
+
+          <!-- For topology-consul -->
+          <dependency>
+            <groupId>com.orbitz.consul</groupId>
+            <artifactId>consul-client</artifactId>
+            <version>${version.com.orbitz.consul}</version>
+          </dependency>
+
+        </dependencies>
+      </dependencyManagement>
+
+    </profile>
+  </profiles>
+
+</project>

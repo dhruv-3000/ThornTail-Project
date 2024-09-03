@@ -1,0 +1,10 @@
+<suite name="MicroProfile TCKs" verbose="1" preserve-order="true" configfailurepolicy="continue">
+
+  <test name="MicroProfile OpenTracing TCK">
+    <packages>
+      <package name="org.eclipse.microprofile.opentracing.tck.*">
+      </package>
+    </packages>
+  </test>
+
+</suite>

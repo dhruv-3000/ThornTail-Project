@@ -1,0 +1,7 @@
+thorntail:
+  microprofile:
+    jwt:
+      realm: testSuiteRealm
+      token:
+        signer-pub-key: classpath:public-key.pem
+        issued-by: "http://testsuite-jwt-issuer.io"

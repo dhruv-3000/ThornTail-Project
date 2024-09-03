@@ -1,0 +1,51 @@
+
+[id='auto-detecting-jdbc-drivers_{context}']
+= Auto-detecting JDBC drivers
+
+{Thorntail} has the capability to detect, install, and register
+a variety of JDBC drivers based on their inclusion as a dependency
+to your application.
+
+The drivers that {Thorntail} auto-detects include:
+
+* H2 - "h2"
+* MySQL - "mysql"
+* PostgreSQL - "postgresql"
+* Apache Derby - "derby"
+* Apache Derby Embedded - "derby-embedded"
+* Apache Hive - "hive2"
+* MariaDB - "mariadb"
+* PrestoDB - "prestodb"
+* EnterpriseDB - "edb"
+* SQLServer - "sqlserver"
+* Oracle - "oracle"
+* Sybase - "sybase"
+* DB2 - "ibmdb2"
+* Teiid - "teiid"
+
+[discrete]
+== Prerequisites
+
+* A Maven-based application.
+* A database to connect to.
+* The Maven coordinates of the JDBC driver you want to use.
+
+[discrete]
+== Procedure
+
+. Add the appropriate dependencies (with the default `<scope>compile</scope>`
+scope) to your application:
++
+[source,xml]
+----
+<dependencies>
+  <dependency>
+    <groupId>io.thorntail</groupId>
+    <artifactId>datasources</artifactId>
+  </dependency>
+include::pom.xml[tag=dependencies,indent=2]
+</dependencies>
+----
++
+H2 is the default database in {Thorntail}.
+

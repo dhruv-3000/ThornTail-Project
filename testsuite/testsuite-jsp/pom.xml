@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.thorntail.testsuite</groupId>
+    <artifactId>testsuite-parent</artifactId>
+    <version>2.7.1.Final-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>testsuite-jsp</artifactId>
+
+  <name>Test Suite: JSP</name>
+  <description>Test Suite: JSP</description>
+
+  <packaging>war</packaging>
+
+  <dependencies>
+    
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>undertow</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>arquillian</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>fluent-hc</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>run-tests</id>
+      <activation>
+        <property>
+          <name>!skipTests</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.thorntail</groupId>
+            <artifactId>thorntail-maven-plugin</artifactId>
+            <version>${project.version}</version>
+            <executions>
+              <execution>
+                <id>package</id>
+                <goals>
+                  <goal>package</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>start</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>start</goal>
+                </goals>
+                <configuration>
+                  <stdoutFile>target/stdout.log</stdoutFile>
+                  <stderrFile>target/stderr.log</stderrFile>
+                  <useUberJar>true</useUberJar>
+                </configuration>
+              </execution>
+              <execution>
+                <id>stop</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>stop</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

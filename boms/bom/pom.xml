@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.thorntail</groupId>
+    <artifactId>boms</artifactId>
+    <version>2.7.1.Final-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>bom</artifactId>
+
+  <name>BOM: 3+ : Recommended</name>
+  <description>BOM: 3+ : Recommended</description>
+
+  <packaging>jar</packaging>
+
+   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>io.thorntail</groupId>
+        <artifactId>thorntail-fraction-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-bom</id>
+            <phase>initialize</phase>
+            <configuration>
+              <stabilityIndex>3+</stabilityIndex>
+            </configuration>
+          </execution>
+          <execution>
+            <id>prep-doc-source</id>
+            <phase>generate-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>de.saumya.mojo</groupId>
+        <artifactId>jruby-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+      </plugin>
+    </plugins>
+
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>${version.wagon-webdav-jackrabbit}</version>
+      </extension>
+    </extensions>
+  </build>
+
+   <profiles>
+      <!-- This profile is used to generate and transform/fix licenses.xml file based on the BOM dependencies -->
+      <profile>
+         <id>licenses</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>io.thorntail</groupId>
+                  <artifactId>thorntail-fraction-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <id>generate-licenses</id>
+                        <goals>
+                           <goal>generate-licenses</goal>
+                        </goals>
+                        <configuration>
+                           <template>${project.parent.build.directory}/generated-project-template.xml</template>
+                           <licensesTemplate>${project.parent.build.directory}/licenses-project-template.xml</licensesTemplate>
+                           <downloadSources>true</downloadSources>
+                           <downloadPoms>true</downloadPoms>
+                           <analyzeRuntimeDependencies>true</analyzeRuntimeDependencies>
+                           <removeCommunity>true</removeCommunity>
+                           <generateZip>true</generateZip>
+                           <!-- Use custom settings to point to the local maven repo cache -->
+                           <userSettings>${project.parent.build.directory}/custom-settings.xml</userSettings>
+                           <additionalBom>io.thorntail:bom-certified:pom:${project.version}</additionalBom>
+                           <excludes>
+                             <exclude>org/codehaus/plexus/plexus/1.0.4/.*</exclude>
+                           </excludes>
+                           <skipBomDependencies>
+                             <param>dependency-bom</param>
+                             <param>shrinkwrap</param>
+                             <param>fraction-metadata</param>
+                           </skipBomDependencies>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                  <execution>
+                    <id>license-zip</id>
+                    <phase>package</phase>
+                    <goals>
+                      <goal>single</goal>
+                    </goals>
+                    <configuration>
+                      <descriptors>
+                        <descriptor>${project.basedir}/license-zip.xml</descriptor>
+                      </descriptors>
+                      <tarLongFileMode>gnu</tarLongFileMode>
+                    </configuration>
+                  </execution>
+                </executions>
+              </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+
+</project>

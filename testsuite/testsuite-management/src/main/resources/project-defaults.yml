@@ -1,0 +1,21 @@
+
+swarm:
+  management:
+    audit-access:
+      audit-log-logger:
+        enabled: true
+    http-interface-management-interface:
+      security-realm: ManagementRealm
+    security-realms:
+      ManagementRealm:
+        in-memory-authentication:
+          users:
+            bob:
+              password: tacos!
+        in-memory-authorization:
+          users:
+            bob:
+              roles:
+                - admin
+
+

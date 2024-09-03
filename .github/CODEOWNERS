@@ -1,0 +1,11 @@
+# Anyone from Core team should approve a PR
+* @thorntail/core
+
+# Project architects
+/core/ @thorntail/architects
+
+# QE team for testsuites
+/testsuite/ @thorntail/qe
+
+# Docs team
+/docs/ @thorntail/documentation

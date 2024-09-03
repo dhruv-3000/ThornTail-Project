@@ -1,0 +1,24 @@
+swarm:
+  logging:
+    root-logger:
+      level: DEBUG
+    console-handlers:
+      CONSOLE:
+        level: DEBUG
+    loggers:
+      org.wildfly.swarm.security:
+        level: TRACE
+        handlers:
+          - CONSOLE
+  security:
+    security-domains:
+      controle-despesas:
+        classic-authentication:
+          login-modules:
+            defaultRoleDatabaseModule:
+              code: org.jboss.security.auth.spi.DatabaseServerLoginModule
+              flag: optional
+              module-options:
+                dsJndiName: java:jboss/datasources/CustomDS
+                password-stacking: useFirstPass
+

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2017 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>io.thorntail.testsuite</groupId>
+      <artifactId>thorntail-microprofile-tck-parent</artifactId>
+      <version>2.7.1.Final-SNAPSHOT</version>
+   </parent>
+
+   <artifactId>thorntail-microprofile-tck-fault-tolerance</artifactId>
+   <name>MicroProfile TCK: Fault Tolerance</name>
+
+   <dependencies>
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>microprofile-fault-tolerance</artifactId>
+      </dependency>
+
+      <dependency>
+         <groupId>org.eclipse.microprofile.fault-tolerance</groupId>
+         <artifactId>microprofile-fault-tolerance-tck</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.testng</groupId>
+         <artifactId>testng</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.arquillian.testng</groupId>
+         <artifactId>arquillian-testng-container</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.hamcrest</groupId>
+         <artifactId>hamcrest-all</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>arquillian</artifactId>
+         <scope>test</scope>
+         <exclusions>
+            <!-- https://issues.jboss.org/browse/SWARM-1699 -->
+            <exclusion>
+               <groupId>org.jboss.arquillian.junit</groupId>
+               <artifactId>arquillian-junit-container</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+
+      <!-- This is needed for tests with @ShouldThrowException - the real
+         exception is org.jboss.weld.exceptions.DeploymentException -->
+      <dependency>
+         <groupId>org.jboss.weld</groupId>
+         <artifactId>weld-core-impl</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+   </dependencies>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+               <suiteXmlFiles>
+                  <suiteXmlFile>src/test/tck-suite.xml</suiteXmlFile>
+               </suiteXmlFiles>
+               <!-- This workaround allows to run a single test using "test"
+                  system property -->
+               <!-- https://issues.apache.org/jira/browse/SUREFIRE-569 -->
+               <dependenciesToScan>
+                  <dependency>org.eclipse.microprofile.fault-tolerance:microprofile-fault-tolerance-tck</dependency>
+               </dependenciesToScan>
+               <systemProperties>
+                  <!-- Set the log level for FT  -->
+                  <property>
+                     <name>thorntail.logging.loggers.[org.wildfly.swarm.microprofile.faulttolerance].level</name>
+                     <value>INFO</value>
+                  </property>
+                  <!-- Uncomment to debug arquillian test -->
+                  <!-- property>
+                     <name>thorntail.debug.port</name>
+                     <value>8787</value>
+                  </property-->
+               </systemProperties>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+</project>
+

@@ -1,0 +1,4 @@
+io:
+  smallrye:
+    faulttolerance:
+      globalThreadPoolSize: 1000

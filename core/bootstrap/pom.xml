@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.thorntail</groupId>
+    <artifactId>build-parent</artifactId>
+    <version>2.7.1.Final-SNAPSHOT</version>
+    <relativePath>../../build-parent/pom.xml</relativePath>
+  </parent>
+
+  <groupId>io.thorntail</groupId>
+  <artifactId>bootstrap</artifactId>
+
+  <name>Bootstrap</name>
+  <description>Bootstrap</description>
+
+  <packaging>jar</packaging>
+
+  <properties>
+    <swarm.fraction.cdi>false</swarm.fraction.cdi>
+    <swarm.fraction.internal>true</swarm.fraction.internal>
+  </properties>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>${project.basedir}/src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.wildfly.swarm.bootstrap.Main</mainClass>
+            </manifest>
+            <manifestEntries>
+              <Multi-Release>true</Multi-Release>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <excludeTransitive>true</excludeTransitive>
+              <includeGroupIds>org.jboss.modules,org.yaml</includeGroupIds>
+              <excludes>**\/MavenArtifactUtil.class,**\/ArtifactCoordinates.class,**\/MavenSettings.class,**\/TypeDescription.class,**\/PropertySubstitute.class</excludes>
+              <outputDirectory>${project.build.directory}/classes</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <!--
+              - this is a separate execution because the thorntail-jdk-specific artifact overrides some
+              - JBoss Modules classes and we need to make sure those are unpacked _after_ JBoss Modules themselves
+              -
+              - also we need to make sure that the JBoss Modules overrides in this project don't collide
+              - with the overrides in thorntail-jdk-specific
+              -->
+            <id>unpack-jdk-specific</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <excludeTransitive>true</excludeTransitive>
+              <includeGroupIds>io.thorntail.jdk-specific</includeGroupIds>
+              <outputDirectory>${project.build.directory}/classes</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jboss.modules</groupId>
+      <artifactId>jboss-modules</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail.jdk-specific</groupId>
+      <artifactId>thorntail-jdk-specific</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging-annotations</artifactId>
+      <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
+            projects that depend on this project.-->
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging-processor</artifactId>
+      <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
+            projects that depend on this project.-->
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap</groupId>
+      <artifactId>shrinkwrap-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap</groupId>
+      <artifactId>shrinkwrap-spi</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap</groupId>
+      <artifactId>shrinkwrap-impl-base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wildfly.core</groupId>
+      <artifactId>wildfly-core-feature-pack</artifactId>
+      <type>zip</type>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+</project>

@@ -1,0 +1,10 @@
+thorntail:
+  microprofile:
+    jwt:
+      path:
+        groups: realm_access/roles
+      token:
+        exp-grace-period: 0
+        signer-pub-key-location: file:${project.basedir}/src/test/resources/keys/public-key.pem
+        issued-by: "http://localhost:8080/auth/realms/thorntail-cmd-client"
+      realm: testSuiteRealm

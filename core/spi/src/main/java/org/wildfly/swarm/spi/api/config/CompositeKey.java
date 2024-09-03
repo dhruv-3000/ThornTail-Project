@@ -1,0 +1,143 @@
+/**
+ * Copyright 2015-2017 Red Hat, Inc, and individual contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wildfly.swarm.spi.api.config;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * A multi-segment configuration key.
+ *
+ * @author Bob McWhirter
+ */
+public class CompositeKey implements ConfigKey {
+
+    public CompositeKey() {
+    }
+
+    public CompositeKey(SimpleKey... parts) {
+        this.parts = Arrays.asList(parts);
+    }
+
+    public CompositeKey(String... parts) {
+        this.parts = Arrays.asList(parts).stream().map(SimpleKey::new).collect(Collectors.toList());
+    }
+
+    public CompositeKey(CompositeKey parent, ConfigKey child) {
+        this.parts = new ArrayList<>();
+        this.parts.addAll(parent.parts);
+        if (child == ConfigKey.EMPTY) {
+            // skip
+        } else if (child instanceof SimpleKey) {
+            this.parts.add((SimpleKey) child);
+        } else if (child instanceof CompositeKey) {
+            this.parts.addAll(((CompositeKey) child).parts);
+        }
+    }
+
+    public CompositeKey(CompositeKey parent, String child) {
+        this(parent, new SimpleKey(child));
+    }
+
+    CompositeKey(List<SimpleKey> parts) {
+        this.parts = parts;
+    }
+
+    @Override
+    public boolean isChildOf(ConfigKey possibleParent) {
+        if (possibleParent.head() == ConfigKey.EMPTY) {
+            return true;
+        }
+        if (!this.head().equals(possibleParent.head())) {
+            return false;
+        }
+
+        return this.subkey(1).isChildOf(possibleParent.subkey(1));
+    }
+
+    @Override
+    public void replace(int position, String name) {
+        this.parts.get(position).replace(0, name);
+    }
+
+    @Override
+    public SimpleKey head() {
+        if (this.parts.isEmpty()) {
+            return ConfigKey.EMPTY;
+        }
+
+        return this.parts.get(0);
+    }
+
+    @Override
+    public ConfigKey subkey(int offset) {
+        if (this.parts.size() <= offset) {
+            return ConfigKey.EMPTY;
+        }
+
+        List<SimpleKey> subParts = this.parts.subList(offset, this.parts.size());
+
+        if (subParts.size() == 1) {
+            return subParts.get(0);
+        }
+
+        return new CompositeKey(subParts);
+    }
+
+    @Override
+    public String name() {
+        return String.join(".",
+                           this.parts.stream().map(SimpleKey::propertyName).collect(Collectors.toList()));
+    }
+
+    @Override
+    public String propertyName() {
+        return String.join(".",
+                           this.parts.stream().map(SimpleKey::propertyName).collect(Collectors.toList()));
+    }
+
+    public CompositeKey append(String... names) {
+        return append(ConfigKey.of(names));
+    }
+
+    public CompositeKey append(ConfigKey key) {
+        return new CompositeKey(this, key);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.parts.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj instanceof CompositeKey) {
+            return this.parts.equals(((CompositeKey) obj).parts);
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name();
+    }
+
+    private List<SimpleKey> parts;
+}

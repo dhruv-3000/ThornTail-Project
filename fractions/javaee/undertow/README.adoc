@@ -1,0 +1,5 @@
+= Undertow
+
+Provides basic HTTP support, including Java Servlets, JavaServer Pages (JSP),
+and JavaServer Pages Standard Tag Library (JSTL) according to JSR-340, JSR-245
+and JSR-52.

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2017 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>io.thorntail.testsuite</groupId>
+      <artifactId>thorntail-microprofile-tck-parent</artifactId>
+      <version>2.7.1.Final-SNAPSHOT</version>
+   </parent>
+
+   <artifactId>thorntail-microprofile-tck-restclient</artifactId>
+   <name>MicroProfile TCK: RestClient</name>
+
+   <dependencies>
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>microprofile-restclient</artifactId>
+      </dependency>
+
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>jaxrs-jsonb</artifactId>
+      </dependency>
+
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>microprofile-config</artifactId>
+      </dependency>
+
+      <!-- TCK Itself -->
+      <dependency>
+         <groupId>org.eclipse.microprofile.rest.client</groupId>
+         <artifactId>microprofile-rest-client-tck</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <!-- TCK Support -->
+      <dependency>
+         <groupId>org.testng</groupId>
+         <artifactId>testng</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.arquillian.testng</groupId>
+         <artifactId>arquillian-testng-container</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>arquillian</artifactId>
+         <scope>test</scope>
+         <exclusions>
+            <!-- https://issues.jboss.org/browse/SWARM-1699 -->
+            <exclusion>
+               <groupId>org.jboss.arquillian.junit</groupId>
+               <artifactId>arquillian-junit-container</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-jdk14</artifactId>
+         <version>${version.slf4j}</version>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>jakarta.json</groupId>
+         <artifactId>jakarta.json-api</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <!-- TODO should be implicit, i think it's mandated by the spec -->
+      <dependency>
+         <groupId>org.jboss.resteasy</groupId>
+         <artifactId>resteasy-json-p-provider</artifactId>
+         <scope>test</scope>
+         <version>${version.resteasy}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.glassfish</groupId>
+         <artifactId>jakarta.json</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>com.github.tomakehurst</groupId>
+         <artifactId>wiremock</artifactId>
+         <version>${version.wiremock}</version>
+         <scope>test</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>org.ow2.asm</groupId>
+               <artifactId>asm</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+
+   </dependencies>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>uk.co.automatictester</groupId>
+            <artifactId>wiremock-maven-plugin</artifactId>
+            <version>${version.wiremock-maven-plugin}</version>
+            <executions>
+               <execution>
+                  <phase>generate-test-sources</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <dir>target/classes</dir>
+                     <params>--port=8765 --verbose</params>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+               <dependenciesToScan>
+                  <dependency>org.eclipse.microprofile.rest.client:microprofile-rest-client-tck</dependency>
+               </dependenciesToScan>
+
+               <!--
+                 - RESTEasy has these excludes. They probably have a bug instead, because the test fails for me always.
+                 - The action takes 15 seconds on my laptop, even though it has a connection timeout of 5 seconds,
+                 - and such difference sounds quite wrong. But hey, they are the experts, and I'm not.
+                 -->
+               <excludes>
+                  <!-- https://github.com/eclipse/microprofile-rest-client/issues/265 -->
+                  <exclude>org.eclipse.microprofile.rest.client.tck.timeout.TimeoutBuilderIndependentOfMPConfigTest</exclude>
+                  <exclude>org.eclipse.microprofile.rest.client.tck.timeout.TimeoutTest</exclude>
+                  <exclude>org.eclipse.microprofile.rest.client.tck.timeout.TimeoutViaMPConfigTest</exclude>
+                  <exclude>org.eclipse.microprofile.rest.client.tck.timeout.TimeoutViaMPConfigWithConfigKeyTest</exclude>
+               </excludes>
+            </configuration>
+         </plugin>
+
+      </plugins>
+   </build>
+
+</project>
+

@@ -1,0 +1,70 @@
+/**
+ * Copyright 2015-2017 Red Hat, Inc, and individual contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.wildfly.swarm.remoting;
+
+import org.wildfly.swarm.config.Remoting;
+import org.wildfly.swarm.config.remoting.EndpointConfiguration;
+import org.wildfly.swarm.config.remoting.HTTPConnector;
+import org.wildfly.swarm.config.runtime.AttributeDocumentation;
+import org.wildfly.swarm.spi.api.Defaultable;
+import org.wildfly.swarm.spi.api.Fraction;
+import org.wildfly.swarm.spi.api.annotations.MarshalDMR;
+import org.wildfly.swarm.spi.api.annotations.WildFlyExtension;
+
+import static org.wildfly.swarm.spi.api.Defaultable.integer;
+
+/**
+ * @author Ken Finnigan
+ */
+@WildFlyExtension(module = "org.jboss.as.remoting")
+@MarshalDMR
+public class RemotingFraction extends Remoting<RemotingFraction> implements Fraction<RemotingFraction> {
+
+    private boolean required;
+
+    public RemotingFraction requireLegacyConnector(boolean required) {
+        this.required = required;
+        return this;
+    }
+
+    public boolean isRequireLegacyConnector() {
+        return this.required || this.port.isExplicit();
+    }
+
+    public static RemotingFraction defaultFraction() {
+        return new RemotingFraction().applyDefaults();
+    }
+
+    public RemotingFraction applyDefaults() {
+        endpointConfiguration(new EndpointConfiguration())
+                .httpConnector(new HTTPConnector("http-remoting-connector")
+                                       .connectorRef("default"));
+
+        return this;
+    }
+
+    public RemotingFraction port(int port) {
+        this.port.set(port);
+        return this;
+    }
+
+    public int port() {
+        return this.port.get();
+    }
+
+    @AttributeDocumentation("Port for legacy remoting connector")
+    private Defaultable<Integer> port = integer(4447);
+}

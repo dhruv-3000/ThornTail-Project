@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.thorntail</groupId>
+    <artifactId>build-parent</artifactId>
+    <version>2.7.1.Final-SNAPSHOT</version>
+    <relativePath>../build-parent/pom.xml</relativePath>
+  </parent>
+
+  <groupId>io.thorntail.servers</groupId>
+  <artifactId>standalone-servers</artifactId>
+
+  <name>Standalone Servers</name>
+  <description>Standalone Servers</description>
+
+  <packaging>pom</packaging>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>io.thorntail</groupId>
+          <artifactId>thorntail-maven-plugin</artifactId>
+          <version>${project.version}</version>
+          <executions>
+            <execution>
+              <id>package</id>
+              <goals>
+                <goal>package</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <failOnError>false</failOnError>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <modules>
+    <!-- DO NOT ADD MODULES HERE. THIS ACTS AS A PARENT POM ONLY.
+         ANY MODULES SHOULD BE ADDED, AS APPROPRIATE, TO THE ROOT
+         pom.xml OF THIS PROJECT. -->
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>uberjar</id>
+      <properties>
+        <thorntail.useUberJar>true</thorntail.useUberJar>
+      </properties>
+    </profile>
+    <profile>
+      <id>run-tests</id>
+      <activation>
+        <property>
+          <name>!skipTests</name>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>io.thorntail</groupId>
+              <artifactId>thorntail-maven-plugin</artifactId>
+              <version>${project.version}</version>
+              <executions>
+                <execution>
+                  <id>start</id>
+                  <phase>pre-integration-test</phase>
+                  <goals>
+                    <goal>start</goal>
+                  </goals>
+                  <configuration>
+                    <properties>
+                      <java.net.preferIPv4Stack>true</java.net.preferIPv4Stack>
+                      <thorntail.bind.address>127.0.0.1</thorntail.bind.address>
+                    </properties>
+                    <stdoutFile>target/stdout.log</stdoutFile>
+                    <stderrFile>target/stderr.log</stderrFile>
+                  </configuration>
+                </execution>
+                <execution>
+                  <id>stop</id>
+                  <phase>post-integration-test</phase>
+                  <goals>
+                    <goal>stop</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

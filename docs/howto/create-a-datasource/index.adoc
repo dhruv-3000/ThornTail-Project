@@ -1,0 +1,45 @@
+
+// This is an assembly
+[id='creating-a-datasource_{context}']
+= Creating a datasource
+
+When working with Java applications, a _datasource_ has
+two components, both equally important:
+
+* The JDBC driver
+* The datasource definition
+
+The task of the JDBC driver is communicating with the database while providing
+a constant API to application developers. An application must supply its own
+JDBC driver because of the wide range of available databases and the driver
+version. Usually, the application does not directly interact with the JDBC
+driver; instead, the underlying runtime manages creating a datasource,
+which provides an efficient way to share and manage a discrete connection or
+a pool of connections to a particular database using the driver.
+
+== Configuring a JDBC driver
+
+There are the following options how to configure JDBC drivers:
+
+include::auto-detecting-jdbc-drivers.adoc[leveloffset=+2]
+
+include::configuring-the-jdbc-driver-manually.adoc[leveloffset=+2]
+
+== Configuring a Datasource
+
+There are the following options for how to configure a datasource:
+
+include::using-default-datasource.adoc[leveloffset=+2]
+
+include::configuring-a-datasource-manually.adoc[leveloffset=+2]
+
+== Example full project-defaults.yml file
+
+Below, you can see an example `project-defaults` file that connect to an H2
+database.
+
+[source,yaml]
+----
+include::src/main/resources/project-defaults.yml[tag=all]
+----
+

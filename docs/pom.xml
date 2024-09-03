@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.thorntail.docs</groupId>
+  <artifactId>docs</artifactId>
+
+  <parent>
+    <groupId>io.thorntail</groupId>
+    <artifactId>build-parent</artifactId>
+    <version>2.7.1.Final-SNAPSHOT</version>
+    <relativePath>../build-parent/pom.xml</relativePath>
+  </parent>
+
+  <name>Thorntail Documentation</name>
+  <description>Thorntail Documentation</description>
+
+  <packaging>pom</packaging>
+
+  <properties>
+    <maven.min.version>3.3.3</maven.min.version>
+
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <swarm.product.build>false</swarm.product.build>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/generated-docs</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/resources</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>de.saumya.mojo</groupId>
+        <artifactId>jruby-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>jruby</goal>
+            </goals>
+            <configuration>
+              <file>src/main/rb/create-main-index.rb</file>
+              <args>${project.version}</args>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <version>${version.asciidoctor-maven-plugin}</version>
+        <inherited>false</inherited>
+        <dependencies>
+          <dependency>
+            <groupId>org.jruby</groupId>
+            <artifactId>jruby-complete</artifactId>
+            <version>${version.jruby}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <attributes>
+            <docinfo>shared</docinfo>
+            <version>${project.version}</version>
+            <communityVersion>${version.wildfly.swarm}</communityVersion>
+            <product>${swarm.product.build}</product>
+            <WildFly>WildFly</WildFly>
+            <Thorntail>Thorntail</Thorntail>
+            <name-s2i-image-openjdk>registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:latest</name-s2i-image-openjdk>
+          </attributes>
+          <doctype>book</doctype>
+          <backend>html5</backend>
+          <resources>
+            <resource>
+              <directory>.</directory>
+              <excludes>
+                <exclude>**/*</exclude>
+              </excludes>
+            </resource>
+          </resources>
+        </configuration>
+        <executions>
+          <execution>
+            <id>output-wayfinding-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+              <sourceDirectory>target</sourceDirectory>
+              <sourceDocumentName>index.adoc</sourceDocumentName>
+              <outputDirectory>${project.build.directory}/generated-docs/</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+              <sourceDirectory>.</sourceDirectory>
+              <sourceDocumentName>index.adoc</sourceDocumentName>
+              <outputDirectory>${project.build.directory}/generated-docs/${project.version}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>publish-scm</goal>
+            </goals>
+            <phase>deploy</phase>
+            <configuration>
+              <pubScmUrl>scm:git:git@github.com:thorntail/docs.thorntail.io.git</pubScmUrl>
+              <dryRun>false</dryRun>
+              <skipDeletedFiles>true</skipDeletedFiles>
+              <content>${project.build.directory}/generated-docs/</content>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>unsupported</id>
+      <dependencies>
+        <dependency>
+          <groupId>io.thorntail</groupId>
+          <artifactId>bom-all</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>boms-product</id>
+      <dependencies>
+        <dependency>
+          <groupId>io.thorntail</groupId>
+          <artifactId>bom</artifactId>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+
+  <modules>
+    <module>reference</module>
+    <module>howto</module>
+  </modules>
+
+</project>

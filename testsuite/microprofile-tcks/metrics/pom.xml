@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2017 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>io.thorntail.testsuite</groupId>
+      <artifactId>thorntail-microprofile-tck-parent</artifactId>
+      <version>2.7.1.Final-SNAPSHOT</version>
+   </parent>
+
+   <artifactId>thorntail-microprofile-tck-metrics</artifactId>
+   <name>MicroProfile TCK: Metrics</name>
+
+   <dependencies>
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>microprofile-metrics</artifactId>
+      </dependency>
+
+      <dependency>
+         <groupId>org.eclipse.microprofile.metrics</groupId>
+         <artifactId>microprofile-metrics-api-tck</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.eclipse.microprofile.metrics</groupId>
+         <artifactId>microprofile-metrics-rest-tck</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>io.thorntail</groupId>
+         <artifactId>arquillian</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.spec.javax.xml.bind</groupId>
+         <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+      <!-- This is needed for tests with @ShouldThrowException - the real
+         exception is org.jboss.weld.exceptions.DeploymentException -->
+      <dependency>
+         <groupId>org.jboss.weld</groupId>
+         <artifactId>weld-core-impl</artifactId>
+         <scope>test</scope>
+      </dependency>
+
+   </dependencies>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+               <dependenciesToScan>
+                  <dependency>org.eclipse.microprofile.metrics:microprofile-metrics-rest-tck</dependency>
+                  <dependency>org.eclipse.microprofile.metrics:microprofile-metrics-api-tck</dependency>
+               </dependenciesToScan>
+               <environmentVariables>
+                  <MP_METRICS_TAGS>tier=integration</MP_METRICS_TAGS>
+               </environmentVariables>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+</project>
+

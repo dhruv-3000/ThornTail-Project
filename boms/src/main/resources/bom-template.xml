@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.thorntail</groupId>
+    <artifactId>parent</artifactId>
+    <version>${project.parent.parent.parent.version}</version>
+    <relativePath />
+  </parent>
+
+  <groupId>io.thorntail</groupId>
+  <artifactId>#{bom-artifactId}</artifactId>
+  <version>${project.version}</version>
+
+  <name>#{bom-name}</name>
+  <description>#{bom-description}</description>
+
+  <packaging>pom</packaging>
+
+  <url>http://thorntail.io/</url>
+  <developers>
+    <developer>
+      <id>thorntail.io</id>
+      <name>Thorntail Community</name>
+      <organization>Thorntail</organization>
+      <organizationUrl>http://thorntail.io/</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:thorntail/thorntail.git</connection>
+    <developerConnection>scm:git:git@github.com:thorntail/thorntail.git</developerConnection>
+    <url>https://github.com/thorntail/thorntail</url>
+    <tag>${project.scm.tag}</tag>
+  </scm>
+
+  <licenses>
+    <license>
+      <name>AL2</name>
+    </license>
+  </licenses>
+
+  <properties>
+    <version.shrinkwrap>${version.org.jboss.shrinkwrap}</version.shrinkwrap>
+    <version.shrinkwrap-descriptors>${version.org.jboss.shrinkwrap.descriptors}</version.shrinkwrap-descriptors>
+    <version.shrinkwrap-resolver>${version.org.jboss.shrinkwrap.resolver}</version.shrinkwrap-resolver>
+    <version.thorntail>${project.version}</version.thorntail>
+    <version.wildfly-config-api-runtime>${version.wildfly.config-api}</version.wildfly-config-api-runtime>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>spi</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.thorntail</groupId>
+        <artifactId>config-api-runtime</artifactId>
+        <version>${version.wildfly-config-api-runtime}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss</groupId>
+        <artifactId>jandex</artifactId>
+        <version>${version.jandex}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap</groupId>
+        <artifactId>shrinkwrap-bom</artifactId>
+        <version>${version.shrinkwrap}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+        <artifactId>shrinkwrap-descriptors-bom</artifactId>
+        <version>${version.shrinkwrap-descriptors}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.resolver</groupId>
+        <artifactId>shrinkwrap-resolver-bom</artifactId>
+        <version>${version.shrinkwrap-resolver}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      #{dependencies}
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>2.10</version>
+      </extension>
+    </extensions>
+  </build>
+
+</project>

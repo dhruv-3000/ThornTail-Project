@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+
+<module xmlns="urn:jboss:module:1.5" name="org.wildfly.swarm.spi" slot="api">
+  <resources>
+    <artifact name="io.thorntail:spi:${project.version}">
+      <filter>
+        <include-set>
+          <path name="org/wildfly/swarm/spi/api"/>
+          <path name="org/wildfly/swarm/spi/api/annotations"/>
+          <path name="org/wildfly/swarm/spi/api/internal"/>
+        </include-set>
+        <exclude-set>
+          <path name="org/wildfly/swarm/spi/runtime"/>
+          <path name="org/wildfly/swarm/spi/runtime/annotations"/>
+        </exclude-set>
+      </filter>
+    </artifact>
+  </resources>
+  <dependencies>
+    <module name="javax.enterprise.api"/>
+    <module name="org.jboss.weld.se"/>
+    <module name="org.wildfly.swarm.container"/>
+    <module name="org.jboss.shrinkwrap"/>
+    <module name="org.jboss.shrinkwrap.descriptors"/>
+    <module name="org.jboss.jandex"/>
+  </dependencies>
+</module>

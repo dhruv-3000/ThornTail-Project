@@ -1,0 +1,319 @@
+
+[id='thorntail-maven-plugin-configuration-options_{context}']
+= {Thorntail} Maven plugin configuration options
+
+The {Thorntail} Maven plugin accepts the following configuration options:
+
+bundleDependencies::
+If `true`, dependencies are included in the `-thorntail.jar` file.
+Otherwise, they are resolved from local Maven repository or from the network at runtime.
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.bundleDependencies`
+
+|Default
+|true
+
+|Used by
+|`package`
+|===
+
+[NOTE]
+--
+In case you set `bundleDependencies` to `false`, a local Maven repository is used at runtime.
+The location of the Maven repository is retrieved either from a `settings.xml` file, or from a system property.
+
+. If a `settings.xml` file is found and it defines a local repository, then this repository is used.
+  The following locations are searched for the `settings.xml` file.
+  The first occurrence of the file is used to retrieve the location of the Maven repository:
+.. If the `jboss.modules.settings.xml.url` system property is defined, then the `settings.xml` file defined in this property is used.
+   The value must be a `+file://...+` URL .
+.. If the `~/.m2/settings.xml` file exists, then it is used.
+.. If the `$M2_HOME/conf/settings.xml` file exists, then it is used.
+. If the path to the Maven repository is not defined in a `settings.xml` file, then:
+.. If the `maven.repo.local` system property is defined, then this repository is used.
+.. Otherwise the standard location `~/.m2/repository` is used.
+--
+
+debug::
+The port to use for debugging.
+If set, the Thorntail process suspends on start and opens a debugger on this port.
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.debug.port`
+
+|Default
+|
+
+|Used by
+|`run`, `start`
+|===
+
+environment::
+A properties-style list of environment variables to use when executing the application.
++
+[cols="1,2a"]
+|===
+|Property
+|_none_
+
+|Default
+|
+
+|Used by
+|`multistart`, `run`, `start`
+|===
+
+environmentFile::
+A `.properties` file with environment variables to use when executing the application.
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.environmentFile`
+
+|Default
+|
+
+|Used by
+|`multistart`, `run`, `start`
+|===
+
+filterWebInfLib::
+If `true`, the plugin removes artifacts that are provided by the Thorntail runtime from the `WEB-INF/lib` directory of the project WAR file.
+If `uberjar-only`, this transformation is only done on the WAR file that is put into the uberjar, and the standalone WAR file remains untouched.
+Otherwise, the contents of `WEB-INF/lib` remain untouched.
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.filterWebInfLib`
+
+|Default
+|true
+
+|Used by
+|`package`
+|===
+
+[NOTE]
+--
+This option is generally not necessary and is provided as a workaround in case the Thorntail plugin removes a dependency required by the application.
+When false, it is the responsibility of the developer to ensure that the `WEB-INF/lib` directory does not contain Thorntail artifacts that would compromise the functionality of the application.
+One way to do that is to avoid expressing dependencies on fractions and rely on xref:auto-detecting-fractions_{context}[auto-detection] or by explicitly listing any required extra fractions using the *fractions* option.
+--
+
+fractionDetectMode::
++
+--
+The mode of fraction detection. The available options are:
+
+* `when_missing`: Runs only when no {Thorntail} dependencies are found.
+* `force`: Always run, and merge any detected fractions with the existing dependencies. Existing dependencies take precedence.
+* `never`: Disable fraction detection.
+
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.detect.mode`
+
+|Default
+|`when_missing`
+
+|Used by
+|`package`, `run`, `start`
+|===
+--
+
+fractions::
++
+--
+A list of extra fractions to include when using auto-detection. It is useful for fractions that cannot be detected or for user-provided fractions.
+
+Use one of the following formats when specifying a fraction:
+* `group:artifact:version`
+* `artifact:version`
+* `artifact`
+
+If no group is provided, `io.thorntail` is assumed.
+
+If no version is provided, the version is taken from the {Thorntail} BOM for the version of the plugin you are using.
+
+If the value starts with a `!` character, the corresponding auto-detected fraction is not installed (unless it is a dependency of any other fraction).
+In the following example the Undertow fraction is not installed even though your application references a class from the `javax.servlet` package:
+
+[source,xml]
+----
+<plugin>
+  <groupId>io.thorntail</groupId>
+  <artifactId>thorntail-maven-plugin</artifactId>
+  <version>${version.thorntail}</version>
+  <executions>
+    <execution>
+      <goals>
+        <goal>package</goal>
+      </goals>
+      <configuration>
+       <fractions>
+         <fraction>!undertow</fraction>
+       </fractions>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+----
+
+[cols="1,2a"]
+|===
+|Property
+|_none_
+
+|Default
+|
+
+|Used by
+|`package`, `run`, `start`
+|===
+--
+
+ifndef::product[]
+hollow::
+Specifies whether the resulting executable JAR is hollow, and, thus, whether or not it includes the default deployment.
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.hollow`
+
+|Default
+|`false`
+
+|Used by
+|`package`
+|===
+endif::[]
+
+jvmArguments::
+A list of `<jvmArgument>` elements specifying additional JVM arguments (such as `-Xmx32m`).
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.jvmArguments`
+
+|Default
+|
+
+|Used by
+|`multistart`, `run`, `start`
+|===
+
+modules::
+Paths to a directory containing additional module definitions.
++
+[cols="1,2a"]
+|===
+|Property
+|_none_
+
+|Default
+|./modules
+
+|Used by
+|`package`, `run`, `start`
+|===
+
+processes::
+Application configurations to start (see xref:maven-plugin-multistart-goal[multistart]).
++
+[cols="1,2a"]
+|===
+|Property
+|_none_
+
+|Default
+|
+
+|Used by
+|`multistart`
+|===
+
+properties::
+See xref:thorntail-maven-plugin-configuration-properties_{context}[].
++
+[cols="1,2a"]
+|===
+|Property
+|_none_
+
+|Default
+|
+
+|Used by
+|`package`, `run`, `start`
+|===
+
+propertiesFile::
+See xref:thorntail-maven-plugin-configuration-properties_{context}[].
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.propertiesFile`
+
+|Default
+|
+
+|Used by
+|`package`, `run`, `start`
+|===
+
+stderrFile::
+Specifies the path to a file where the `stderr` output is stored instead of being sent to the `stderr` output of the launching process.
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.stderr`
+
+|Default
+|
+
+|Used by
+|`run`, `start`
+|===
+
+stdoutFile::
+Specifies the path to a file where the `stdout` output is stored instead of being sent to the `stdout` output of the launching process.
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.stdout`
+
+|Default
+|
+
+|Used by
+|`run`, `start`
+|===
+
+useUberJar::
+If specified, the `-thorntail.jar` file located in `${project.build.directory}` is used.
+This JAR is not created automatically, so make sure you execute the `package` goal first.
++
+[cols="1,2a"]
+|===
+|Property
+|`thorntail.useUberJar`
+
+|Default
+|
+
+|Used by
+|`run`, `start`
+|===

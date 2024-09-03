@@ -1,0 +1,3 @@
+= CDI
+
+Provides context and dependency-injection support according to JSR-299.

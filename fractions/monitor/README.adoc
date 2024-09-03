@@ -1,0 +1,5 @@
+= Monitor
+
+WARNING: This fraction is deprecated.
+Use the `io.thorntail:microprofile-health` fraction instead.
+

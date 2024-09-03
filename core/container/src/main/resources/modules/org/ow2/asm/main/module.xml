@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+
+<module xmlns="urn:jboss:module:1.3" name="org.ow2.asm">
+  <properties>
+    <property name="jboss.api" value="private"/>
+  </properties>
+
+  <dependencies>
+    <system export="true">
+      <paths>
+        <path name="org/objectweb/asm"/>
+        <path name="org/objectweb/asm/commons"/>
+        <path name="org/objectweb/asm/commons"/>
+        <path name="org/objectweb/asm/signature"/>
+        <path name="org/objectweb/asm/tree"/>
+        <path name="org/objectweb/asm/util"/>
+        <path name="org/objectweb/asm/xml"/>
+      </paths>
+    </system>
+    <module name="org.ow2.asm" slot="impl" services="import" export="true"/>
+  </dependencies>
+
+</module>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.5" name="org.jboss.weld.se">
+  <properties>
+    <property name="jboss.api" value="private"/>
+  </properties>
+  <resources>
+    <artifact name="org.jboss.weld.environment:weld-environment-common:${version.weld-se}"/>
+    <artifact name="org.jboss.weld:weld-api:${org.jboss.weld:weld-api:jar.version}"/>
+    <artifact name="org.jboss.weld:weld-spi:${org.jboss.weld:weld-api:jar.version}"/>
+    <artifact name="org.jboss.weld:weld-core-impl:${org.jboss.weld:weld-core-impl:jar.version}"/>
+    <artifact name="org.jboss.weld.se:weld-se-core:${version.weld-se}"/>
+  </resources>
+
+  <dependencies>
+    <module name="com.google.guava"/>
+    <module name="javax.api"/>
+    <module name="javax.enterprise.api"/>
+    <module name="javax.annotation.api"/>
+    <module name="org.jboss.classfilewriter"/>
+    <module name="org.jboss.logging" export="true"/>
+    <module name="org.jboss.jandex"/>
+  </dependencies>
+</module>

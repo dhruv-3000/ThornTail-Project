@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+  -->
+<module xmlns="urn:jboss:module:1.1" name="org.jboss.as.product" slot="main">
+
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
+
+    <resources>
+        <resource-root path="dir"/>
+        <!-- Insert resources here -->
+    </resources>
+
+    <dependencies>
+    </dependencies>
+</module>

@@ -1,0 +1,15 @@
+[id='microprofile-fault-tolerance']
+= MicroProfile Fault Tolerance
+
+This fraction implements the https://github.com/eclipse/microprofile-fault-tolerance[Eclipse MicroProfile Fault Tolerance API^].
+It is based on https://github.com/smallrye/smallrye-fault-tolerance[SmallRye Fault Tolerance].
+
+== Configuration
+
+SmallRye Fault Tolerance supports all the configuration options of MicroProfile Fault Tolerance and, additionally, the following options:
+
+- `io.smallrye.faulttolerance.globalThreadPoolSize`: size of the thread pool used for running `@Asynchronous` actions.
+This does not include bulkhead thread pools.
+Defaults to `100`.
+- `io.smallrye.faulttolerance.timeoutExecutorThreads`: size of the thread pool used for scheduling timeouts.
+Defaults to `5`.

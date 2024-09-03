@@ -1,0 +1,9 @@
+thorntail:
+  microprofile:
+    jwt:
+      token:
+        signer-pub-key: file:${project.basedir}/src/test/resources/keys/public-key.pem
+        issued-by: "http://testsuite-jwt-issuer.io"
+        header: Cookie
+        cookie: jwt
+      realm: testSuiteRealm
